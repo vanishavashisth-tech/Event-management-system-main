@@ -2,17 +2,26 @@ import request from 'supertest';
 
 import app from '../app.js';
 import Event from '../models/Event.js';
+import User from '../models/User.js';
 
 describe('Events API', () => {
   describe('GET /api/events', () => {
     it('should return all events', async () => {
+      const organizer = await User.create({
+        name: 'Organizer',
+        email: 'organizer@example.com',
+        password: 'password123',
+        role: 'organizer'
+      });
+
       await Event.create({
         title: 'Hackathon 2025',
         description: 'Coding event',
         category: 'Tech',
         date: new Date(),
         location: 'Delhi',
-        capacity: 100
+        capacity: 100,
+        organizer: organizer._id
       });
 
       const res = await request(app).get('/api/events');
