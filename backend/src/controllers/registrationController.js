@@ -87,3 +87,21 @@ export const checkInParticipant = async (req, res) => {
     });
   }
 };
+export const checkRegistrationStatus = async (req, res) => {
+  try {
+    const registration = await Registration.findOne({
+      user: req.user.id,
+      event: req.params.id
+    });
+
+    res.status(200).json({
+      registered: !!registration,
+      registration
+    });
+
+  } catch (err) {
+    res.status(500).json({
+      message: err.message
+    });
+  }
+};
